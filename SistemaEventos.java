@@ -20,10 +20,22 @@ public class SistemaEventos {
         participantesPorMatricula = new HashMap<>();
         palestrantesPorCpf = new HashMap<>();
         atividades = new ArrayList<>();
-        diasFuncionamento = new String[7];
+        diasFuncionamento = new String[]{
+            "Segunda",
+            "Terça",
+            "Quarta",
+            "Quinta",
+            "Sexta",
+            "Sábado",
+            "Domingo"
+        };
     }
 
     public boolean cadastrarParticipante(Participante participante) {
+
+        if (participante == null) {
+            return false;
+        }
 
         if (participantesPorMatricula.containsKey(
                 participante.getMatricula())) {
@@ -39,6 +51,10 @@ public class SistemaEventos {
 
     public boolean cadastrarPalestrante(Palestrante palestrante) {
 
+        if (palestrante == null) {
+            return false;
+        }
+
         if (palestrantesPorCpf.containsKey(
                 palestrante.getCpf())) {
             return false;
@@ -52,6 +68,10 @@ public class SistemaEventos {
     }
 
     public boolean cadastrarAtividade(Atividade atividade) {
+
+        if (atividade == null) {
+            return false;
+        }
 
         for (Atividade a : atividades) {
 
@@ -143,7 +163,8 @@ public class SistemaEventos {
 
         for (Atividade atividade : atividades) {
 
-            total += atividade.calcularCusto();
+            total += atividade.calcularCusto()
+                    * atividade.getNumeroParticipantesInscritos();
         }
 
         return total;
@@ -220,26 +241,39 @@ public class SistemaEventos {
 
     public Map<String, Participante>
             getParticipantesPorMatricula() {
-        return participantesPorMatricula;
+
+        return new HashMap<>(
+                participantesPorMatricula);
     }
 
     public Map<String, Palestrante>
             getPalestrantesPorCpf() {
-        return palestrantesPorCpf;
+
+        return new HashMap<>(
+                palestrantesPorCpf);
     }
 
     public List<Atividade>
             getAtividades() {
-        return atividades;
+
+        return new ArrayList<>(
+                atividades);
     }
 
     public String[] getDiasFuncionamento() {
-        return diasFuncionamento;
+
+        return diasFuncionamento.clone();
     }
 
     public void setDiasFuncionamento(
-            String[] diasFuncionamento) {
-        this.diasFuncionamento
-                = diasFuncionamento;
-    }
+        String[] diasFuncionamento) {
+if (diasFuncionamento == null
+        || diasFuncionamento.length != 7) {
+    throw new IllegalArgumentException(
+            "O vetor deve possuir 7 dias.");
+}
+
+    this.diasFuncionamento =
+            diasFuncionamento.clone();
+}
 }
