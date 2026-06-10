@@ -21,6 +21,17 @@ public class SistemaEventos {
         palestrantesPorCpf = new HashMap<>();
         atividades = new ArrayList<>();
         diasFuncionamento = new String[7];
+        inicializarDias();
+    }
+
+    private void inicializarDias() {
+        diasFuncionamento[0] = "Segunda-feira";
+        diasFuncionamento[1] = "Terca-feira";
+        diasFuncionamento[2] = "Quarta-feira";
+        diasFuncionamento[3] = "Quinta-feira";
+        diasFuncionamento[4] = "Sexta-feira";
+        diasFuncionamento[5] = "Sabado";
+        diasFuncionamento[6] = "Domingo";
     }
 
     public boolean cadastrarParticipante(Participante participante) {
@@ -94,11 +105,9 @@ public class SistemaEventos {
             String matricula,
             String codigoAtividade) {
 
-        Participante participante
-                = buscarParticipantePorMatricula(matricula);
+        Participante participante = buscarParticipantePorMatricula(matricula);
 
-        Atividade atividade
-                = buscarAtividadePorCodigo(codigoAtividade);
+        Atividade atividade = buscarAtividadePorCodigo(codigoAtividade);
 
         if (participante == null
                 || atividade == null) {
@@ -112,8 +121,7 @@ public class SistemaEventos {
 
     public void listarParticipantes() {
 
-        for (Participante participante
-                : participantesPorMatricula.values()) {
+        for (Participante participante : participantesPorMatricula.values()) {
 
             System.out.println(participante);
         }
@@ -121,8 +129,7 @@ public class SistemaEventos {
 
     public void listarPalestrantes() {
 
-        for (Palestrante palestrante
-                : palestrantesPorCpf.values()) {
+        for (Palestrante palestrante : palestrantesPorCpf.values()) {
 
             System.out.println(palestrante);
         }
@@ -130,27 +137,24 @@ public class SistemaEventos {
 
     public void listarAtividades() {
 
-        for (Atividade atividade
-                : atividades) {
+        for (Atividade atividade : atividades) {
 
             System.out.println(atividade);
         }
     }
 
     public double calcularFaturamentoTotal() {
-
         double total = 0;
 
         for (Atividade atividade : atividades) {
-
-            total += atividade.calcularCusto();
+            total += atividade.calcularCusto()
+                    * atividade.getNumeroParticipantesInscritos();
         }
 
         return total;
     }
 
     public double calcularTaxaMediaOcupacao() {
-
         if (atividades.isEmpty()) {
             return 0;
         }
@@ -158,9 +162,7 @@ public class SistemaEventos {
         double soma = 0;
 
         for (Atividade atividade : atividades) {
-
-            soma += (double) atividade.getNumeroParticipantesInscritos()
-                    / atividade.getCapacidadeMaxima();
+            soma += atividade.obterTaxaOcupacao();
         }
 
         return soma / atividades.size();
@@ -176,12 +178,10 @@ public class SistemaEventos {
 
         for (Atividade atividade : atividades) {
 
-            double taxaAtual
-                    = (double) atividade.getNumeroParticipantesInscritos()
+            double taxaAtual = (double) atividade.getNumeroParticipantesInscritos()
                     / atividade.getCapacidadeMaxima();
 
-            double taxaMaior
-                    = (double) maior.getNumeroParticipantesInscritos()
+            double taxaMaior = (double) maior.getNumeroParticipantesInscritos()
                     / maior.getCapacidadeMaxima();
 
             if (taxaAtual > taxaMaior) {
@@ -202,12 +202,10 @@ public class SistemaEventos {
 
         for (Atividade atividade : atividades) {
 
-            double taxaAtual
-                    = (double) atividade.getNumeroParticipantesInscritos()
+            double taxaAtual = (double) atividade.getNumeroParticipantesInscritos()
                     / atividade.getCapacidadeMaxima();
 
-            double taxaMenor
-                    = (double) menor.getNumeroParticipantesInscritos()
+            double taxaMenor = (double) menor.getNumeroParticipantesInscritos()
                     / menor.getCapacidadeMaxima();
 
             if (taxaAtual < taxaMenor) {
@@ -218,28 +216,27 @@ public class SistemaEventos {
         return menor;
     }
 
-    public Map<String, Participante>
-            getParticipantesPorMatricula() {
-        return participantesPorMatricula;
+    public Map<String, Participante> getParticipantesPorMatricula() {
+        return new HashMap<>(participantesPorMatricula);
     }
 
-    public Map<String, Palestrante>
-            getPalestrantesPorCpf() {
-        return palestrantesPorCpf;
+    public Map<String, Palestrante> getPalestrantesPorCpf() {
+        return new HashMap<>(palestrantesPorCpf);
     }
 
-    public List<Atividade>
-            getAtividades() {
-        return atividades;
+    public List<Atividade> getAtividades() {
+        return new ArrayList<>(atividades);
     }
 
     public String[] getDiasFuncionamento() {
-        return diasFuncionamento;
+        return diasFuncionamento.clone();
     }
 
-    public void setDiasFuncionamento(
-            String[] diasFuncionamento) {
-        this.diasFuncionamento
-                = diasFuncionamento;
+    public void setDiasFuncionamento(String[] diasFuncionamento) {
+        if (diasFuncionamento == null || diasFuncionamento.length != 7) {
+            throw new IllegalArgumentException("Dias de funcionamento deve ter 7 dias.");
+        }
+
+        this.diasFuncionamento = diasFuncionamento.clone();
     }
 }
