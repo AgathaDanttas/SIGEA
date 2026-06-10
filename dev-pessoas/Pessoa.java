@@ -72,7 +72,7 @@ public abstract class Pessoa {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (!(obj instanceof Pessoa)) {
             return false;
         }
         Pessoa pessoa = (Pessoa) obj;
