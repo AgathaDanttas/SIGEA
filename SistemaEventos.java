@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import modelo.Participante;
-import modelo.Palestrante;
 import modelo.Atividade;
+import modelo.Palestrante;
+import modelo.Participante;
 
 public class SistemaEventos {
 
