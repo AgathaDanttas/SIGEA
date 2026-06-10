@@ -43,6 +43,10 @@ public abstract class Atividade {
         return inscrito;
     }
 
+    public double obterTaxaOcupacao() {
+    return (double) participantesInscritos.size() / capacidadeMaxima * 100;
+}
+
     public int obterVagasDisponiveis() {
         return capacidadeMaxima - participantesInscritos.size();
     }
